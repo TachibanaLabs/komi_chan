@@ -5,7 +5,8 @@ defmodule KomiChanWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", KomiChanWeb do
+  scope "/", KomiChanWeb do
     pipe_through :api
+    resources "/threads", ThreadController, except: [:new, :edit]
   end
 end
