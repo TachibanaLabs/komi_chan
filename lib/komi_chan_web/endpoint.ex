@@ -31,6 +31,7 @@ defmodule KomiChanWeb.Endpoint do
 
   plug Plug.MethodOverride
   plug Plug.Head
+  plug CORSPlug
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
