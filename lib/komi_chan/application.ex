@@ -17,7 +17,7 @@ defmodule KomiChan.Application do
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: KomiChan.Supervisor]
-    IO.puts("Creating mnesia tables: #{setup_memento()}")
+    KomiChan.Bootstrap.run()
     Supervisor.start_link(children, opts)
   end
 
@@ -26,9 +26,5 @@ defmodule KomiChan.Application do
   def config_change(changed, _new, removed) do
     KomiChanWeb.Endpoint.config_change(changed, removed)
     :ok
-  end
-
-  def setup_memento do
-    Memento.Table.create(KomiChan.Repository.Thread)
   end
 end

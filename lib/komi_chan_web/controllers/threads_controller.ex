@@ -1,7 +1,7 @@
-defmodule KomiChanWeb.ThreadController do
+defmodule KomiChanWeb.ThreadsController do
   use KomiChanWeb, :controller
 
-  alias KomiChan.Repository.Thread, as: ThreadRepo
+  alias KomiChan.Repositories.Thread, as: ThreadRepo
 
   action_fallback KomiChanWeb.FallbackController
 

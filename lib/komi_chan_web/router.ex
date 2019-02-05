@@ -7,6 +7,6 @@ defmodule KomiChanWeb.Router do
 
   scope "/", KomiChanWeb do
     pipe_through :api
-    resources "/threads", ThreadController, except: [:new, :edit]
+    resources "/threads", ThreadsController, except: [:new, :edit]
   end
 end

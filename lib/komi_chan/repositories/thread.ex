@@ -1,14 +1,11 @@
-defmodule KomiChan.Repository.Thread do
+defmodule KomiChan.Repositories.Thread do
   @store __MODULE__
 
   use Memento.Table,
-    attributes: [:id, :message, :created_at, :updated_at, :replies],
+    attributes: [:id, :title, :comment, :board, :created_at, :updated_at],
+    index: [:board],
     autoincrement: true,
     type: :ordered_set
-
-  def new(message) do
-    %@store{message: message}
-  end
 
   def find(id) do
     Memento.transaction!(fn ->
