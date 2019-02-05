@@ -8,6 +8,9 @@ defmodule KomiChanWeb.ThreadView do
   end
 
   def render("thread.json", %{thread: thread}) do
-    %{id: thread.id, message: thread.message}
+    case thread do
+      nil -> %{error: "Not Found"}
+      _ -> %{id: thread.id, message: thread.message}
+    end
   end
 end
