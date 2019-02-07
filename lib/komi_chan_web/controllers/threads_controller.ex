@@ -13,7 +13,8 @@ defmodule KomiChanWeb.ThreadsController do
     render(conn, "thread.json", thread: ThreadRepo.find(thread_id))
   end
 
-  def create(conn, %{"message" => message}) do
-    render(conn, "thread.json", thread: ThreadRepo.new(message) |> ThreadRepo.create_thread())
+  def create(conn, %{"thread" => thread}) do
+    as_model = %ThreadRepo{board: thread["board"], comment: thread["comment"], title: thread["title"]}
+    render(conn, "thread.json", thread: as_model |> ThreadRepo.create_thread())
   end
 end

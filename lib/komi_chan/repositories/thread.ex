@@ -7,6 +7,10 @@ defmodule KomiChan.Repositories.Thread do
     autoincrement: true,
     type: :ordered_set
 
+  def all_on_board(board) do
+   run_query({:==, :board, board})
+  end
+
   def find(id) do
     Memento.transaction!(fn ->
       Memento.Query.read(@store, id)

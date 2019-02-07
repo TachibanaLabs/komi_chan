@@ -1,14 +1,15 @@
 defmodule KomiChan.Bootstrap do
   require Logger
 
-  alias KomiChan.Repositories.Board, as: Board
-  alias KomiChan.Repositories.Thread, as: Thread
-  alias KomiChan.Repositories.Reply, as: Reply
-  alias Memento.Table, as: Table
+  alias KomiChan.Repositories.Board
+  alias KomiChan.Repositories.Thread
+  alias KomiChan.Repositories.Reply
+  alias Memento.Table
 
   def run do
     setup_tables()
     create_boards()
+    create_threads()
   end
 
   def setup_tables do
@@ -23,5 +24,12 @@ defmodule KomiChan.Bootstrap do
     Board.create_board(%Board{name: "t", description: "test", rules: "none"})
     Board.create_board(%Board{name: "a", description: "animemes", rules: "none"})
     Board.create_board(%Board{name: "test", description: "another test", rules: "none"})
+  end
+
+  def create_threads do
+    Logger.info("Adding Test Threads")
+    Thread.create_thread(%Thread{title: "test title", comment: "Komi san besto wertaifu", board: "a"})
+    Thread.create_thread(%Thread{title: "test title", comment: "Komi san besto wertaifu", board: "t"})
+    Thread.create_thread(%Thread{title: "test title", comment: "Komi san besto wertaifu", board: "test"})
   end
 end
