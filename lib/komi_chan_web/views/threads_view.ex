@@ -12,7 +12,7 @@ defmodule KomiChanWeb.ThreadsView do
     %{id: thread.id, title: thread.title, comment: thread.comment, board: thread.board, created_at: thread.created_at}
   end
 
-  def render("thread.json", %{thread: thread}) do
+  def render("thread.json", %{thread: _thread}) do
     %{error: "Not Found"}
   end
 end
