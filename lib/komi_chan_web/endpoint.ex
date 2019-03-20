@@ -1,9 +1,10 @@
 defmodule KomiChanWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :komi_chan
 
-  socket "/socket", KomiChanWeb.UserSocket,
-    websocket: true,
-    longpoll: false
+  socket "/socket",
+         KomiChanWeb.UserSocket,
+         websocket: true,
+         longpoll: false
 
   # Serve at "/" the static files from "priv/static" directory.
   #
