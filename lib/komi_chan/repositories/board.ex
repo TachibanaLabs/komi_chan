@@ -6,4 +6,8 @@ defmodule KomiChan.Repositories.Board do
   use Memento.Table,
     attributes: [:name, :description, :rules],
     type: :set
+
+  def name(id) do
+    query({:==, :name, id})
+  end
 end

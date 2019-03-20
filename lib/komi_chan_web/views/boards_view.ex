@@ -1,20 +1,18 @@
 defmodule KomiChanWeb.BoardsView do
   use KomiChanWeb, :view
 
-  alias KomiChan.Repositories.Board, as: BoardRepo
-  alias KomiChanWeb.ThreadsView
+  alias KomiChan.Repositories.Board
+  alias KomiChanWeb.BoardsView
 
   def render("index.json", %{boards: boards}) do
-    %{boards: render_many(boards, ThreadsView, "board.json", as: :board)}
+    %{boards: render_many(boards, BoardsView, "board.json", as: :board)}
   end
 
-  def render("board.json", %{board: board = %BoardRepo{}}) do
+  def render("board.json", %{board: board = %Board{}}) do
     %{
-      id: board.id,
-      title: board.title,
-      comment: board.comment,
-      board: board.board,
-      created_at: board.created_at
+      description: board.description,
+      name: board.name,
+      rules: board.rules
     }
   end
 

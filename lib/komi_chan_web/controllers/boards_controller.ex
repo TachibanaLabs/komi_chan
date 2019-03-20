@@ -9,14 +9,15 @@ defmodule KomiChanWeb.BoardsController do
     render(conn, "index.json", boards: BoardRepo.all())
   end
 
-  def show(conn, %{"id" => board_id}) do
-    render(conn, "board.json", board: BoardRepo.find(board_id))
+  def show(conn, %{"id" => name}) do
+    board = name |> BoardRepo.name() |> List.first()
+    render(conn, "board.json", board: board)
   end
 
   def create(
         conn,
         %{
-          "thread" => %{
+          "board" => %{
             "name" => name,
             "description" => description,
             "rules" => rules
@@ -28,7 +29,7 @@ defmodule KomiChanWeb.BoardsController do
     render(
       conn,
       "board.json",
-      thread: BoardRepo.create(as_model)
+      board: BoardRepo.create(as_model)
     )
   end
 end
