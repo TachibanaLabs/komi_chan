@@ -9,7 +9,13 @@ defmodule KomiChanWeb.BoardsView do
   end
 
   def render("board.json", %{board: board = %BoardRepo{}}) do
-    %{id: board.id, title: board.title, comment: board.comment, board: board.board, created_at: board.created_at}
+    %{
+      id: board.id,
+      title: board.title,
+      comment: board.comment,
+      board: board.board,
+      created_at: board.created_at
+    }
   end
 
   def render("board.json", %{board: _board}) do

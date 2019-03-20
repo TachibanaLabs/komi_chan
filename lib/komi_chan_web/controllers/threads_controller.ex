@@ -24,6 +24,7 @@ defmodule KomiChanWeb.ThreadsController do
         }
       ) do
     as_model = %ThreadRepo{board: board, comment: comment, title: title}
+
     render(
       conn,
       "thread.json",

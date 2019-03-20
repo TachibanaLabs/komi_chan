@@ -24,6 +24,7 @@ defmodule KomiChanWeb.RepliesController do
         }
       ) do
     as_model = %ReplyRepo{comment: comment, board: board, thread: thread}
+
     render(
       conn,
       "reply.json",

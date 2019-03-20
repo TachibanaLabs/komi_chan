@@ -24,6 +24,7 @@ defmodule KomiChanWeb.BoardsController do
         }
       ) do
     as_model = %BoardRepo{name: name, description: description, rules: rules}
+
     render(
       conn,
       "board.json",

@@ -3,20 +3,18 @@ defmodule KomiChan.Repositories.Repository do
 
   defmacro __using__(_opts) do
     quote do
-
       @store __MODULE__
 
       def normalize_id(id), do: id
+
       def normalize_id(id) when is_binary(id) do
         String.to_integer(id)
       end
 
       def find(id) do
-        Memento.transaction!(
-          fn ->
-            Memento.Query.read(@store, normalize_id(id))
-          end
-        )
+        Memento.transaction!(fn ->
+          Memento.Query.read(@store, normalize_id(id))
+        end)
       end
 
       def all do
@@ -30,22 +28,18 @@ defmodule KomiChan.Repositories.Repository do
       end
 
       def update(model) do
-        Memento.transaction!(
-          fn ->
-            model
-            |> Map.put(:updated_at, NaiveDateTime.utc_now())
-            |> Memento.Query.write()
-          end
-        )
+        Memento.transaction!(fn ->
+          model
+          |> Map.put(:updated_at, NaiveDateTime.utc_now())
+          |> Memento.Query.write()
+        end)
       end
 
       def query(pattern) do
-        Memento.transaction!(
-          fn ->
-            @store
-            |> Memento.Query.select(pattern)
-          end
-        )
+        Memento.transaction!(fn ->
+          @store
+          |> Memento.Query.select(pattern)
+        end)
       end
     end
   end
