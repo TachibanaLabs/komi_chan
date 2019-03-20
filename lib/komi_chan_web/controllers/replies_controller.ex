@@ -6,16 +6,28 @@ defmodule KomiChanWeb.RepliesController do
   action_fallback KomiChanWeb.FallbackController
 
   def index(conn, _params) do
-    render(conn, "index.json", replies: ReplyRepo.all_replies())
+    render(conn, "index.json", replies: ReplyRepo.all())
   end
 
   def show(conn, %{"id" => reply_id}) do
-    found = reply_id |> String.to_integer |> ReplyRepo.find
-    render(conn, "reply.json", reply: found)
+    render(conn, "reply.json", reply: ReplyRepo.find(reply_id))
   end
 
-  def create(conn, %{"reply" => %{"comment" => comment, "board" => board, "thread" => thread}}) do
+  def create(
+        conn,
+        %{
+          "reply" => %{
+            "comment" => comment,
+            "board" => board,
+            "thread" => thread
+          }
+        }
+      ) do
     as_model = %ReplyRepo{comment: comment, board: board, thread: thread}
-    render(conn, "reply.json", reply: as_model |> ReplyRepo.create_reply())
+    render(
+      conn,
+      "reply.json",
+      reply: ReplyRepo.create(as_model)
+    )
   end
 end

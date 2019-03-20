@@ -1,4 +1,4 @@
-defmodule KomiChanWeb.ThreadsView do
+defmodule KomiChanWeb.BoardsView do
   use KomiChanWeb, :view
 
   alias KomiChan.Repositories.Board, as: BoardRepo
