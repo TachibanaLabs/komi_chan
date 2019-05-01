@@ -5,11 +5,11 @@ defmodule KomiChan.Repositories.Repository do
     quote do
       @store __MODULE__
 
-      def normalize_id(id), do: id
-
       def normalize_id(id) when is_binary(id) do
         String.to_integer(id)
       end
+
+      def normalize_id(id), do: id
 
       def find(id) do
         Memento.transaction!(fn ->
