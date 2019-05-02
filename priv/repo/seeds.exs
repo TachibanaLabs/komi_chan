@@ -1,0 +1,1 @@
+alias KomiChan.Repositories.{Board, Reply, Thread}

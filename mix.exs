@@ -40,7 +40,8 @@ defmodule KomiChan.MixProject do
       {:memento, "~> 0.2.1"},
       {:cors_plug, "~> 2.0"},
       {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
-      {:husky, "~> 1.0", only: :dev, runtime: false}
+      {:husky, "~> 1.0", only: :dev, runtime: false},
+      {:vex, "~> 0.8.0"}
     ]
   end
 end
