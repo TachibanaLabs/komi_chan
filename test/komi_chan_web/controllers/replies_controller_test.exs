@@ -1,4 +1,4 @@
-defmodule KomiChanWeb.BoardsControllerTest do
+defmodule KomiChanWeb.RepliesControllerTest do
   use KomiChanWeb.ConnCase
   import KomiChan.Factory
 
