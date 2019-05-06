@@ -1,4 +1,4 @@
-# KomiChan
+# KomiChan [![Build Status](https://travis-ci.org/neftalyluis/komi_chan.svg?branch=master)](https://travis-ci.org/TachibanaLabs/komi_chan)
 
 To start your Phoenix server:
 
