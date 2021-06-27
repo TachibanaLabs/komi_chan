@@ -1,0 +1,21 @@
+version: 2
+updates:
+- package-ecosystem: mix
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: ex_machina
+    versions:
+    - 2.5.0
+    - 2.6.0
+  - dependency-name: credo
+    versions:
+    - 1.5.4
+  - dependency-name: plug_cowboy
+    versions:
+    - 2.4.1
+  - dependency-name: cors_plug
+    versions:
+    - 2.0.2
