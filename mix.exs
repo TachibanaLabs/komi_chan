@@ -41,7 +41,7 @@ defmodule KomiChan.MixProject do
       {:cors_plug, "~> 2.0"},
       {:credo, "~> 1.5.6", only: [:dev, :test], runtime: false},
       {:husky, "~> 1.0", only: :dev, runtime: false},
-      {:vex, "~> 0.8.0"},
+      {:vex, "~> 0.9.0"},
       {:ex_machina, "~> 2.3", only: :test}
     ]
   end
