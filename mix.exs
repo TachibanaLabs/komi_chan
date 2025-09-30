@@ -38,7 +38,7 @@ defmodule KomiChan.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:memento, "~> 0.3.1"},
-      {:cors_plug, "~> 2.0"},
+      {:cors_plug, "~> 3.0"},
       {:credo, "~> 1.7.0", only: [:dev, :test], runtime: false},
       {:husky, "~> 1.0", only: :dev, runtime: false},
       {:vex, "~> 0.9.0"},
