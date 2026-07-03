@@ -44,6 +44,110 @@ custom classes must fully style the input
 - Focus on **delightful details** like hover effects, loading states, and smooth page transitions
 
 
+## Plan mode template
+
+When the user requests plan mode, produce a structured implementation plan.
+
+### Project constants
+
+- **App**: `:komi_chan` / `KomiChan` / `KomiChanWeb`
+- **Stack**: Elixir 1.18.4 / OTP 28.1, Phoenix 1.8, LiveView, Ecto, PostgreSQL, Tailwind v4
+- **Locale**: English (en)
+
+### Existing contexts
+
+| Context | Purpose | Key Schemas |
+|---------|---------|-------------|
+| Boards | Board management | Board |
+| Threads | Thread management per board | Thread |
+| Posts | Post management per thread | Post |
+
+### Existing LiveViews
+
+| Module | Route | Purpose |
+|--------|-------|---------|
+| `BoardLive.Index` | `/boards` | List boards |
+| `BoardLive.Form` | `/boards/new`, `/boards/:id/edit` | Create/edit board |
+| `BoardLive.Show` | `/boards/:id` | View board |
+| `ThreadLive.Index` | `/threads` | List threads |
+| `ThreadLive.Form` | `/threads/new`, `/threads/:id/edit` | Create/edit thread |
+| `ThreadLive.Show` | `/threads/:id` | View thread |
+| `PostLive.Index` | `/posts` | List posts |
+| `PostLive.Form` | `/posts/new`, `/posts/:id/edit` | Create/edit post |
+| `PostLive.Show` | `/posts/:id` | View post |
+
+### Plan structure
+
+1. **Goal** — One-paragraph summary of what we're building and why.
+2. **Affected Contexts & Schemas** — Which contexts are touched, new schemas, new context functions.
+3. **Database Changes** — New tables, alterations, migration order.
+4. **LiveView Changes** — New LiveViews, route additions, key UI components.
+5. **Implementation Order** — Numbered steps with clear dependencies.
+6. **UI/UX Notes** — Labels for all new UI elements. Mobile layout considerations.
+7. **Edge Cases & Open Questions** — List anything that needs a decision.
+
+### Rules for plans
+
+- Prefer extending existing contexts over creating new ones
+- Use LiveView streams for any collection displayed in a list
+- Propose `mix precommit` as the final verification step
+
+## Production infrastructure
+
+### Platform & hosting
+
+- **Fly.io** single-region deployment (TBD)
+- Single shared-CPU VM with 1 GB RAM
+
+### Database
+
+- **PostgreSQL** (local dev, external provider in prod)
+- Connected via `DATABASE_URL` env var
+
+### Runtime & build
+
+- **Elixir 1.18.4** / **Erlang/OTP 28.1**
+- Assets: Tailwind CSS v4, esbuild (es2022 target)
+- Release built with `mix release`, served via Bandit
+
+### Secrets & environment variables
+
+| Variable | Required | Purpose |
+|---|---|---|
+| `DATABASE_URL` | Yes | Postgres connection string |
+| `SECRET_KEY_BASE` | Yes | Phoenix session/cookie signing |
+| `PHX_HOST` | No | Public hostname |
+| `PORT` | No (default: `4000`) | HTTP port |
+| `POOL_SIZE` | No (default: `10`) | DB connection pool |
+| `DNS_CLUSTER_QUERY` | No | Erlang clustering |
+
+### Supervision tree
+
+    KomiChan.Supervisor (one_for_one):
+    1. KomiChanWeb.Telemetry
+    2. KomiChan.Repo
+    3. DNSCluster
+    4. Phoenix.PubSub
+    5. KomiChanWeb.Endpoint
+
+### Constraints
+
+- Small VM (1 shared CPU, 1 GB RAM) when deployed
+- External database adds network latency vs colocated DB
+- No background processing — async work needs a GenServer or Oban
+
+## Agent skills
+
+### Issue tracker
+
+Issues live as local markdown files under `.scratch/<feature-slug>/`.
+
+### Triage labels
+
+Uses the default canonical label vocabulary — `needs-triage`, `needs-info`,
+`ready-for-agent`, `ready-for-human`, `wontfix`.
+
+
 <!-- usage-rules-start -->
 
 <!-- phoenix:elixir-start -->

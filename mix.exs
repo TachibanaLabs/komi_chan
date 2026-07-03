@@ -5,13 +5,19 @@ defmodule KomiChan.MixProject do
     [
       app: :komi_chan,
       version: "0.1.0",
-      elixir: "~> 1.15",
+      elixir: "~> 1.18",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
       compilers: [:phoenix_live_view] ++ Mix.compilers(),
-      listeners: [Phoenix.CodeReloader]
+      listeners: [Phoenix.CodeReloader],
+      dialyzer: [
+        plt_file: {:no_warn, "priv/plts/dialyzer.plt"},
+        flags: [:error_handling, :missing_return, :extra_return, :underspecs],
+        plt_add_apps: [:ex_unit, :mix]
+      ],
+      usage_rules: usage_rules()
     ]
   end
 
@@ -27,7 +33,7 @@ defmodule KomiChan.MixProject do
 
   def cli do
     [
-      preferred_envs: [precommit: :test]
+      preferred_envs: [precommit: :test, coveralls: :test]
     ]
   end
 
@@ -65,7 +71,12 @@ defmodule KomiChan.MixProject do
       {:gettext, "~> 0.26"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
-      {:bandit, "~> 1.5"}
+      {:bandit, "~> 1.5"},
+      {:usage_rules, "~> 1.0", only: [:dev]},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:sobelow, "~> 0.13", only: [:dev, :test], runtime: false},
+      {:excoveralls, "~> 0.18", only: :test}
     ]
   end
 
@@ -88,7 +99,30 @@ defmodule KomiChan.MixProject do
         "esbuild komi_chan --minify",
         "phx.digest"
       ],
-      precommit: ["compile --warning-as-errors", "deps.unlock --unused", "format", "test"]
+      precommit: [
+        "compile --warnings-as-errors",
+        "deps.unlock --unused",
+        "format",
+        "credo",
+        "sobelow --config",
+        "test --cover"
+      ]
+    ]
+  end
+
+  defp usage_rules do
+    [
+      file: "AGENTS.md",
+      usage_rules: ["usage_rules:all", {:phoenix, link: :markdown}],
+      skills: [
+        location: ".agents/skills",
+        build: [
+          "phoenix-framework": [
+            description: "Use this skill working with Phoenix Framework",
+            usage_rules: [:phoenix, ~r/^phoenix_/]
+          ]
+        ]
+      ]
     ]
   end
 end

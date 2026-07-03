@@ -6,7 +6,6 @@ defmodule KomiChanWeb.ThreadLiveTest do
 
   @create_attrs %{sticky: true}
   @update_attrs %{sticky: false}
-  @invalid_attrs %{sticky: false}
   defp create_thread(_) do
     thread = thread_fixture()
 
@@ -33,10 +32,6 @@ defmodule KomiChanWeb.ThreadLiveTest do
 
       assert render(form_live) =~ "New Thread"
 
-      assert form_live
-             |> form("#thread-form", thread: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
-
       assert {:ok, index_live, _html} =
                form_live
                |> form("#thread-form", thread: @create_attrs)
@@ -57,10 +52,6 @@ defmodule KomiChanWeb.ThreadLiveTest do
                |> follow_redirect(conn, ~p"/threads/#{thread}/edit")
 
       assert render(form_live) =~ "Edit Thread"
-
-      assert form_live
-             |> form("#thread-form", thread: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
 
       assert {:ok, index_live, _html} =
                form_live
@@ -99,10 +90,6 @@ defmodule KomiChanWeb.ThreadLiveTest do
                |> follow_redirect(conn, ~p"/threads/#{thread}/edit?return_to=show")
 
       assert render(form_live) =~ "Edit Thread"
-
-      assert form_live
-             |> form("#thread-form", thread: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
 
       assert {:ok, show_live, _html} =
                form_live

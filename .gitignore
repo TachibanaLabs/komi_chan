@@ -35,3 +35,6 @@ komi_chan-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# Local environment variables
+.env
+
