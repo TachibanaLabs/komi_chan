@@ -3,7 +3,6 @@ defmodule KomiChan.Posts do
   The Posts context.
   """
 
-  import Ecto.Query, warn: false
   alias KomiChan.Repo
 
   alias KomiChan.Posts.Post

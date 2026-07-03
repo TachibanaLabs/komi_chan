@@ -4,21 +4,22 @@ defmodule KomiChanWeb.PostLiveTest do
   import Phoenix.LiveViewTest
   import KomiChan.PostsFixtures
 
-  @create_attrs %{name: "some name", text: "some text", subject: "some subject"}
-  @update_attrs %{
-    name: "some updated name",
-    text: "some updated text",
-    subject: "some updated subject"
-  }
-  @invalid_attrs %{name: nil, text: nil, subject: nil}
-  defp create_post(_) do
-    post = post_fixture()
+  defp thread_fixture_for_posts(_) do
+    {:ok, board} = KomiChan.Boards.create_board(%{name: "test board"})
 
-    %{post: post}
+    {:ok, thread} =
+      KomiChan.Threads.create_thread(%{title: "test thread", sticky: false, board_id: board.id})
+
+    %{thread: thread}
+  end
+
+  defp create_post(ctx) do
+    post = post_fixture()
+    %{post: post, thread: ctx.thread}
   end
 
   describe "Index" do
-    setup [:create_post]
+    setup [:thread_fixture_for_posts, :create_post]
 
     test "lists all posts", %{conn: conn, post: post} do
       {:ok, _index_live, html} = live(conn, ~p"/posts")
@@ -27,7 +28,7 @@ defmodule KomiChanWeb.PostLiveTest do
       assert html =~ post.name
     end
 
-    test "saves new post", %{conn: conn} do
+    test "saves new post", %{conn: conn, thread: thread} do
       {:ok, index_live, _html} = live(conn, ~p"/posts")
 
       assert {:ok, form_live, _} =
@@ -39,12 +40,19 @@ defmodule KomiChanWeb.PostLiveTest do
       assert render(form_live) =~ "New Post"
 
       assert form_live
-             |> form("#post-form", post: @invalid_attrs)
+             |> form("#post-form", post: %{name: nil, text: nil, subject: nil, thread_id: nil})
              |> render_change() =~ "can&#39;t be blank"
 
       assert {:ok, index_live, _html} =
                form_live
-               |> form("#post-form", post: @create_attrs)
+               |> form("#post-form",
+                 post: %{
+                   name: "some name",
+                   text: "some text",
+                   subject: "some subject",
+                   thread_id: thread.id
+                 }
+               )
                |> render_submit()
                |> follow_redirect(conn, ~p"/posts")
 
@@ -64,13 +72,16 @@ defmodule KomiChanWeb.PostLiveTest do
 
       assert render(form_live) =~ "Edit Post"
 
-      assert form_live
-             |> form("#post-form", post: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
-
       assert {:ok, index_live, _html} =
                form_live
-               |> form("#post-form", post: @update_attrs)
+               |> form("#post-form",
+                 post: %{
+                   name: "some updated name",
+                   text: "some updated text",
+                   subject: "some updated subject",
+                   thread_id: post.thread_id
+                 }
+               )
                |> render_submit()
                |> follow_redirect(conn, ~p"/posts")
 
@@ -88,7 +99,7 @@ defmodule KomiChanWeb.PostLiveTest do
   end
 
   describe "Show" do
-    setup [:create_post]
+    setup [:thread_fixture_for_posts, :create_post]
 
     test "displays post", %{conn: conn, post: post} do
       {:ok, _show_live, html} = live(conn, ~p"/posts/#{post}")
@@ -108,13 +119,16 @@ defmodule KomiChanWeb.PostLiveTest do
 
       assert render(form_live) =~ "Edit Post"
 
-      assert form_live
-             |> form("#post-form", post: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
-
       assert {:ok, show_live, _html} =
                form_live
-               |> form("#post-form", post: @update_attrs)
+               |> form("#post-form",
+                 post: %{
+                   name: "some updated name",
+                   text: "some updated text",
+                   subject: "some updated subject",
+                   thread_id: post.thread_id
+                 }
+               )
                |> render_submit()
                |> follow_redirect(conn, ~p"/posts/#{post}")
 

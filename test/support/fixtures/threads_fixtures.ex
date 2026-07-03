@@ -8,13 +8,20 @@ defmodule KomiChan.ThreadsFixtures do
   Generate a thread.
   """
   def thread_fixture(attrs \\ %{}) do
+    {:ok, board} =
+      KomiChan.Boards.create_board(%{name: unique_board_name()})
+
     {:ok, thread} =
       attrs
       |> Enum.into(%{
-        sticky: true
+        title: "some title",
+        sticky: true,
+        board_id: board.id
       })
       |> KomiChan.Threads.create_thread()
 
     thread
   end
+
+  defp unique_board_name, do: "board-#{System.unique_integer([:positive])}"
 end

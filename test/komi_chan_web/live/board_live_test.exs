@@ -4,7 +4,7 @@ defmodule KomiChanWeb.BoardLiveTest do
   import Phoenix.LiveViewTest
   import KomiChan.BoardsFixtures
 
-  @create_attrs %{name: "some name"}
+  @create_attrs %{name: "some unique name"}
   @update_attrs %{name: "some updated name"}
   @invalid_attrs %{name: nil}
   defp create_board(_) do

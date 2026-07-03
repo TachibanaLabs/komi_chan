@@ -3,7 +3,6 @@ defmodule KomiChan.Boards do
   The Boards context.
   """
 
-  import Ecto.Query, warn: false
   alias KomiChan.Repo
 
   alias KomiChan.Boards.Board

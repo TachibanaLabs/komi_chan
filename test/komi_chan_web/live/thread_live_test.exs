@@ -3,17 +3,20 @@ defmodule KomiChanWeb.ThreadLiveTest do
 
   import Phoenix.LiveViewTest
   import KomiChan.ThreadsFixtures
+  import KomiChan.BoardsFixtures
 
-  @create_attrs %{sticky: true}
-  @update_attrs %{sticky: false}
-  defp create_thread(_) do
+  defp board_fixture_for_threads(_) do
+    board = board_fixture()
+    %{board: board}
+  end
+
+  defp create_thread(ctx) do
     thread = thread_fixture()
-
-    %{thread: thread}
+    %{thread: thread, board: ctx.board}
   end
 
   describe "Index" do
-    setup [:create_thread]
+    setup [:board_fixture_for_threads, :create_thread]
 
     test "lists all threads", %{conn: conn} do
       {:ok, _index_live, html} = live(conn, ~p"/threads")
@@ -21,7 +24,7 @@ defmodule KomiChanWeb.ThreadLiveTest do
       assert html =~ "Listing Threads"
     end
 
-    test "saves new thread", %{conn: conn} do
+    test "saves new thread", %{conn: conn, board: board} do
       {:ok, index_live, _html} = live(conn, ~p"/threads")
 
       assert {:ok, form_live, _} =
@@ -34,7 +37,9 @@ defmodule KomiChanWeb.ThreadLiveTest do
 
       assert {:ok, index_live, _html} =
                form_live
-               |> form("#thread-form", thread: @create_attrs)
+               |> form("#thread-form",
+                 thread: %{title: "some title", sticky: true, board_id: board.id}
+               )
                |> render_submit()
                |> follow_redirect(conn, ~p"/threads")
 
@@ -55,7 +60,7 @@ defmodule KomiChanWeb.ThreadLiveTest do
 
       assert {:ok, index_live, _html} =
                form_live
-               |> form("#thread-form", thread: @update_attrs)
+               |> form("#thread-form", thread: %{title: "updated title", sticky: false})
                |> render_submit()
                |> follow_redirect(conn, ~p"/threads")
 
@@ -72,7 +77,7 @@ defmodule KomiChanWeb.ThreadLiveTest do
   end
 
   describe "Show" do
-    setup [:create_thread]
+    setup [:board_fixture_for_threads, :create_thread]
 
     test "displays thread", %{conn: conn, thread: thread} do
       {:ok, _show_live, html} = live(conn, ~p"/threads/#{thread}")
@@ -93,7 +98,7 @@ defmodule KomiChanWeb.ThreadLiveTest do
 
       assert {:ok, show_live, _html} =
                form_live
-               |> form("#thread-form", thread: @update_attrs)
+               |> form("#thread-form", thread: %{title: "updated title", sticky: false})
                |> render_submit()
                |> follow_redirect(conn, ~p"/threads/#{thread}")
 
