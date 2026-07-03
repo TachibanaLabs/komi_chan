@@ -1,0 +1,11 @@
+# Sobelow Skipped Findings
+# Format: "Fingerprint", "Type"
+# Fingerprint is the first 14 characters of the SHA256 hash of the finding
+# Type is the finding type (e.g., "Config.CSP", "XSS.Raw")
+#
+# Example:
+# "abc123def45678", "Config.CSP"
+#
+# To add a finding to the skip list, run sobelow and copy the fingerprint:
+#   mix sobelow --config --threshold low
+# Then add entries here and re-run to verify they're skipped.
