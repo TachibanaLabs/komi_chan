@@ -8,7 +8,7 @@ defmodule KomiChan.PostsTest do
 
     import KomiChan.PostsFixtures
 
-    @invalid_attrs %{name: nil, text: nil, subject: nil}
+    @invalid_attrs %{name: nil, text: nil, subject: nil, thread_id: nil}
 
     test "list_posts/0 returns all posts" do
       post = post_fixture()
@@ -21,7 +21,17 @@ defmodule KomiChan.PostsTest do
     end
 
     test "create_post/1 with valid data creates a post" do
-      valid_attrs = %{name: "some name", text: "some text", subject: "some subject"}
+      {:ok, board} = KomiChan.Boards.create_board(%{name: "test board"})
+
+      {:ok, thread} =
+        KomiChan.Threads.create_thread(%{title: "test", sticky: false, board_id: board.id})
+
+      valid_attrs = %{
+        name: "some name",
+        text: "some text",
+        subject: "some subject",
+        thread_id: thread.id
+      }
 
       assert {:ok, %Post{} = post} = Posts.create_post(valid_attrs)
       assert post.name == "some name"

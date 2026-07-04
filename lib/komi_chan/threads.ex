@@ -3,7 +3,6 @@ defmodule KomiChan.Threads do
   The Threads context.
   """
 
-  import Ecto.Query, warn: false
   alias KomiChan.Repo
 
   alias KomiChan.Threads.Thread

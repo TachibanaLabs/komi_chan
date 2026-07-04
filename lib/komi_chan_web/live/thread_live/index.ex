@@ -21,6 +21,7 @@ defmodule KomiChanWeb.ThreadLive.Index do
         rows={@streams.threads}
         row_click={fn {_id, thread} -> JS.navigate(~p"/threads/#{thread}") end}
       >
+        <:col :let={{_id, thread}} label="Title">{thread.title}</:col>
         <:col :let={{_id, thread}} label="Sticky">{thread.sticky}</:col>
         <:action :let={{_id, thread}}>
           <div class="sr-only">

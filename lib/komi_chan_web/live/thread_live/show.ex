@@ -21,6 +21,7 @@ defmodule KomiChanWeb.ThreadLive.Show do
       </.header>
 
       <.list>
+        <:item title="Title">{@thread.title}</:item>
         <:item title="Sticky">{@thread.sticky}</:item>
       </.list>
     </Layouts.app>

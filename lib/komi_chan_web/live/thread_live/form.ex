@@ -1,6 +1,7 @@
 defmodule KomiChanWeb.ThreadLive.Form do
   use KomiChanWeb, :live_view
 
+  alias KomiChan.Boards
   alias KomiChan.Threads
   alias KomiChan.Threads.Thread
 
@@ -14,6 +15,14 @@ defmodule KomiChanWeb.ThreadLive.Form do
       </.header>
 
       <.form for={@form} id="thread-form" phx-change="validate" phx-submit="save">
+        <.input field={@form[:title]} type="text" label="Title" />
+        <.input
+          field={@form[:board_id]}
+          type="select"
+          label="Board"
+          options={Enum.map(@boards, &{&1.name, &1.id})}
+          prompt="Choose a board"
+        />
         <.input field={@form[:sticky]} type="checkbox" label="Sticky" />
         <footer>
           <.button phx-disable-with="Saving..." variant="primary">Save Thread</.button>
@@ -41,6 +50,7 @@ defmodule KomiChanWeb.ThreadLive.Form do
     socket
     |> assign(:page_title, "Edit Thread")
     |> assign(:thread, thread)
+    |> assign(:boards, Boards.list_boards())
     |> assign(:form, to_form(Threads.change_thread(thread)))
   end
 
@@ -50,6 +60,7 @@ defmodule KomiChanWeb.ThreadLive.Form do
     socket
     |> assign(:page_title, "New Thread")
     |> assign(:thread, thread)
+    |> assign(:boards, Boards.list_boards())
     |> assign(:form, to_form(Threads.change_thread(thread)))
   end
 

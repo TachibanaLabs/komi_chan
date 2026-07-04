@@ -1,6 +1,7 @@
 defmodule KomiChanWeb.PostLive.Form do
   use KomiChanWeb, :live_view
 
+  alias KomiChan.Threads
   alias KomiChan.Posts
   alias KomiChan.Posts.Post
 
@@ -16,7 +17,14 @@ defmodule KomiChanWeb.PostLive.Form do
       <.form for={@form} id="post-form" phx-change="validate" phx-submit="save">
         <.input field={@form[:name]} type="text" label="Name" />
         <.input field={@form[:subject]} type="text" label="Subject" />
-        <.input field={@form[:text]} type="text" label="Text" />
+        <.input field={@form[:text]} type="textarea" label="Text" />
+        <.input
+          field={@form[:thread_id]}
+          type="select"
+          label="Thread"
+          options={Enum.map(@threads, &{&1.title, &1.id})}
+          prompt="Choose a thread"
+        />
         <footer>
           <.button phx-disable-with="Saving..." variant="primary">Save Post</.button>
           <.button navigate={return_path(@return_to, @post)}>Cancel</.button>
@@ -43,6 +51,7 @@ defmodule KomiChanWeb.PostLive.Form do
     socket
     |> assign(:page_title, "Edit Post")
     |> assign(:post, post)
+    |> assign(:threads, Threads.list_threads())
     |> assign(:form, to_form(Posts.change_post(post)))
   end
 
@@ -52,6 +61,7 @@ defmodule KomiChanWeb.PostLive.Form do
     socket
     |> assign(:page_title, "New Post")
     |> assign(:post, post)
+    |> assign(:threads, Threads.list_threads())
     |> assign(:form, to_form(Posts.change_post(post)))
   end
 

@@ -8,7 +8,7 @@ defmodule KomiChan.ThreadsTest do
 
     import KomiChan.ThreadsFixtures
 
-    @invalid_attrs %{sticky: nil}
+    @invalid_attrs %{title: nil, sticky: nil, board_id: nil}
 
     test "list_threads/0 returns all threads" do
       thread = thread_fixture()
@@ -21,9 +21,11 @@ defmodule KomiChan.ThreadsTest do
     end
 
     test "create_thread/1 with valid data creates a thread" do
-      valid_attrs = %{sticky: true}
+      {:ok, board} = KomiChan.Boards.create_board(%{name: "test board"})
+      valid_attrs = %{title: "some title", sticky: true, board_id: board.id}
 
       assert {:ok, %Thread{} = thread} = Threads.create_thread(valid_attrs)
+      assert thread.title == "some title"
       assert thread.sticky == true
     end
 
@@ -33,9 +35,10 @@ defmodule KomiChan.ThreadsTest do
 
     test "update_thread/2 with valid data updates the thread" do
       thread = thread_fixture()
-      update_attrs = %{sticky: false}
+      update_attrs = %{title: "updated title", sticky: false}
 
       assert {:ok, %Thread{} = thread} = Threads.update_thread(thread, update_attrs)
+      assert thread.title == "updated title"
       assert thread.sticky == false
     end
 
